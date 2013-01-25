@@ -20,6 +20,7 @@ public class ISSTest {
 		assertThat(ISS.limitAngularPosition(2*360+1.0)).isEqualTo(1.0);
 		assertThat(ISS.limitAngularPosition(-1.0)).isEqualTo(359.0);
 		assertThat(ISS.limitAngularPosition(-354.0)).isEqualTo(6.0);
+		assertThat(ISS.limitAngularPosition(360.0)).isEqualTo(0.0);
 	}
 
 	@Test
