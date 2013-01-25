@@ -1,12 +1,12 @@
 import java.io.*;
 
 public class ISS {
-	public static final double SARJ_VELOCITY_LIMIT = 0.150; // per second
-	public static final double SARJ_VELOCITY_HALF = 0.075; // per second
+	public static final double SARJ_VELOCITY_LIMIT = 0.150 / 2; // per second
+	public static final double SARJ_VELOCITY_HALF = 0.075 / 2; // per second
 	//public static final double SARJ_ACCELERATION_LIMIT = 0.005; // per second, 0.3 per minute
 
-	public static final double BGA_VELOCITY_LIMIT = 0.250; // per second
-	public static final double BGA_VELOCITY_HALF = 0.125; // per second
+	public static final double BGA_VELOCITY_LIMIT = 0.250 / 2; // per second
+	public static final double BGA_VELOCITY_HALF = 0.125 / 2; // per second
 	//public static final double BGA_ACCELERATION_LIMIT = 0.01; // per second
 
 	public static final Positions INITIAL_POSITION = new Positions(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
