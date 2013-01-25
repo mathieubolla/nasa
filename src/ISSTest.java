@@ -31,39 +31,4 @@ public class ISSTest {
 		assertThat(ISS.angle(355, 5)).isEqualTo(10.0);
 		assertThat(ISS.angle(5, 355)).isEqualTo(-10.0);
 	}
-
-	@Test
-	public void shouldTransition() {
-		assertThat(ISS.transition(0.0, 1.0, Double.POSITIVE_INFINITY)).isEqualTo(1.0);
-		assertThat(ISS.transition(1.0, 0.0, Double.POSITIVE_INFINITY)).isEqualTo(0.0);
-		assertThat(ISS.transition(359.0, 0.0, Double.POSITIVE_INFINITY)).isEqualTo(0.0);
-		assertThat(ISS.transition(0.0, 359.0, Double.POSITIVE_INFINITY)).isEqualTo(359.0);
-
-		assertThat(ISS.transition(0.0, 1.0, 0.5)).isEqualTo(0.5);
-		assertThat(ISS.transition(1.0, 0.0, 0.5)).isEqualTo(0.5);
-		assertThat(ISS.transition(359.0, 0.0, 0.5)).isEqualTo(359.5);
-		assertThat(ISS.transition(0.0, 359.0, 0.5)).isEqualTo(359.5);
-	}
-
-	@Test
-	public void shouldSpeed() {
-		assertThat(ISS.speed(0.0, 1.0, Double.POSITIVE_INFINITY)).isEqualTo(1.0 / 60);
-		assertThat(ISS.speed(1.0, 0.0, Double.POSITIVE_INFINITY)).isEqualTo(-1.0 / 60);
-		assertThat(ISS.speed(359.0, 0.0, Double.POSITIVE_INFINITY)).isEqualTo(1.0 / 60);
-		assertThat(ISS.speed(0.0, 359.0, Double.POSITIVE_INFINITY)).isEqualTo(-1.0 / 60);
-
-		assertThat(ISS.speed(0.0, 100.0, 0.5)).isEqualTo(0.5);
-		assertThat(ISS.speed(100.0, 0.0, 0.5)).isEqualTo(-0.5);
-		assertThat(ISS.speed(300.0, 0.0, 0.5)).isEqualTo(0.5);
-		assertThat(ISS.speed(0.0, 300.0, 0.5)).isEqualTo(-0.5);
-	}
-
-	@Test
-	public void shouldHandleSARJCommands() {
-		assertThat(ISS.SARJCommand.FRONT.getSpeed(0.0)).isEqualTo(ISS.SARJ_VELOCITY_LIMIT);
-		assertThat(ISS.SARJCommand.BACK.getSpeed(0.0)).isEqualTo(-ISS.SARJ_VELOCITY_LIMIT);
-
-		assertThat(ISS.SARJCommand.FRONT.getSpeed(ISS.SARJ_VELOCITY_LIMIT)).isEqualTo(ISS.SARJ_VELOCITY_LIMIT);
-		assertThat(ISS.SARJCommand.BACK.getSpeed(ISS.SARJ_VELOCITY_LIMIT)).isEqualTo(-ISS.SARJ_VELOCITY_LIMIT);
-	}
 }
