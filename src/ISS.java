@@ -1,11 +1,28 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ISS {
-    public static final double SARJAcceleration = .005; // degree/s^2
-    public static final double BGAAcceleration = .01; // degree/s^2
+	private static final double FLIGH_CONST = 0.0;
 
-    public static final double SARJVelocity = .15; // degree/s
-    public static final double BGAVelocity = .25; // degree/s
+	// 90 : horizontal
+	// 23 : vertical
+	// 47 : horizontal
+	// 69 : vertical
+
+	private Simulation simulation = new Simulation(
+		new Planning(0.0, 0.0).add(9, Sequence.STOPPED).add(Sequence.SARJ_B90).add(9, Sequence.STOPPED).add(Sequence.SARJ_F90).add(9, Sequence.STOPPED).add(Sequence.SARJ_B90).add(9, Sequence.STOPPED).add(Sequence.SARJ_F90).fillWith(Sequence.STOPPED),
+		new Planning(0.0, 0.0).add(9, Sequence.STOPPED).add(Sequence.SARJ_B90).add(9, Sequence.STOPPED).add(Sequence.SARJ_F90).add(9, Sequence.STOPPED).add(Sequence.SARJ_B90).add(9, Sequence.STOPPED).add(Sequence.SARJ_F90).fillWith(Sequence.STOPPED),
+		new Planning(180.0, 0.0 + FLIGH_CONST).fillWith(Sequence.STOPPED), //BGA1
+		new Planning(0.0, 0.0 + FLIGH_CONST).fillWith(Sequence.STOPPED), //BGA2
+		new Planning(180.0, 0.0 + FLIGH_CONST).fillWith(Sequence.STOPPED), //BGA3
+		new Planning(0.0, 0.0 + FLIGH_CONST).fillWith(Sequence.STOPPED), //BGA4
+		new Planning(180.0, 0.0 + FLIGH_CONST).fillWith(Sequence.STOPPED), //BGA5
+		new Planning(0.0, 0.0 + FLIGH_CONST).fillWith(Sequence.STOPPED), //BGA6
+		new Planning(180.0, 0.0 + FLIGH_CONST).fillWith(Sequence.STOPPED), //BGA7
+		new Planning(0.0, 0.0 + FLIGH_CONST).fillWith(Sequence.STOPPED) //BGA8
+	);
 
 	public static void main(String... args) throws Exception {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -29,44 +46,7 @@ public class ISS {
 	}
 
 	public double[] getStateAtMinute(int minute) {
-        switch(minute) {
-            case 0:
-                return new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-            case 1:
-                return new double[] { 4.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; // front pulse sarj
-            case 2:
-                return new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; // reverse pulse sarj
-            case 3:
-                return new double[] { 6.75, 0.15, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; // cold start sarj
-            case 4:
-                return new double[] { 6.75 + 9.0, 0.15, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; // hold sarj
-            case 5:
-                return new double[] { 6.75 + 9.0, -0.15, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; // reverse sarj
-            case 6:
-                return new double[] { 6.75, -0.15, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; // hold back sarj
-            case 7:
-                return new double[] { 6.75 - 2.25, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; // hot to stop sarj remaining position 4.5
-            case 8:
-                return new double[] { 6.75 - 2.25, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; // back pulse sarj to go to zero because remaining position = pulse sarj
-            case 9:
-                return new double[] { 0.0, 0.0, 0.0, 0.0, 8.75, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; // front pulse bga
-            case 10:
-                return new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; // back pulse bga
-            case 11:
-                return new double[] { 0.0, 0.0, 0.0, 0.0, 11.875, 0.25, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; // cold start bga
-            case 12:
-                return new double[] { 0.0, 0.0, 0.0, 0.0, 11.875 + 15, 0.25, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; // hold bga
-            case 13:
-                return new double[] { 0.0, 0.0, 0.0, 0.0, 11.875 + 15 - 2.5, -0.25, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; // reverse bga
-            case 14:
-                return new double[] { 0.0, 0.0, 0.0, 0.0, 11.875 - 2.5, -0.25, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; // hold back bga
-            case 15:
-                return new double[] { 0.0, 0.0, 0.0, 0.0, 11.875 - 2.5 - 3.125, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; // hot to stop bga remaining position: 6.25
-            case 16:
-                return new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }; // back pulse bga to go to zero because remaining position < pulse bga
-            default:
-                return new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-        }
+		return simulation.getFor(minute);
 	}
 
 	public static String roundedDouble(double inputValue) {
@@ -98,5 +78,220 @@ public class ISS {
 		}
 
 		return delta;
+	}
+
+	public static class Command {
+		private final double position;
+		private final double speed;
+
+		public Command(double position, double speed) {
+			this.position = position;
+			this.speed = speed;
+		}
+
+		public double getPosition() {
+			return position;
+		}
+
+		public double getSpeed() {
+			return speed;
+		}
+	}
+
+	public static class Sequence {
+		private final List<Command> commands;
+
+		public Sequence(Command... commands) {
+			this.commands = new ArrayList<Command>(commands.length);
+			Collections.addAll(this.commands, commands);
+		}
+
+		public long getSize() {
+			return commands.size();
+		}
+
+		public double[][] getSteps(double originalPosition, double originalSpeed) {
+			double[][] steps = new double[(int)getSize()][2];
+			double position = originalPosition;
+			double speed = originalSpeed;
+			for (int i = 0; i < getSize(); i++) {
+				Command command = commands.get(i);
+				position = limitAngularPosition(position + command.getPosition());
+				speed = command.getSpeed();
+
+				steps[i][0] = position;
+				steps[i][1] = speed;
+			}
+			return steps;
+		}
+
+		public static final Sequence SARJ_F30 = new Sequence(SARJ.STOP_TO_LFULL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.FULLL_TO_STOP(Direction.FRONT));
+		public static final Sequence SARJ_F90 = new Sequence(SARJ.STOP_TO_LFULL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.FULLL_TO_STOP(Direction.FRONT));
+		public static final Sequence SARJ_B30 = new Sequence(SARJ.STOP_TO_LFULL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.FULLL_TO_STOP(Direction.BACK));
+		public static final Sequence SARJ_B90 = new Sequence(SARJ.STOP_TO_LFULL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.FULLL_TO_STOP(Direction.BACK));
+
+		public static final Sequence BGA_F30 = new Sequence(BGA.STOP_TO_FULL(Direction.FRONT), BGA.HOLD(Direction.FRONT), BGA.FULL_TO_STOP(Direction.FRONT));
+		public static final Sequence BGA_F45 = new Sequence(BGA.STOP_TO_FULL(Direction.FRONT), BGA.HOLD(Direction.FRONT), BGA.HOLD(Direction.FRONT), BGA.FULL_TO_STOP(Direction.FRONT));
+
+		public static final Sequence BGA_B30 = new Sequence(BGA.STOP_TO_FULL(Direction.BACK), BGA.HOLD(Direction.BACK), BGA.FULL_TO_STOP(Direction.BACK));
+		public static final Sequence BGA_B45 = new Sequence(BGA.STOP_TO_FULL(Direction.BACK), BGA.HOLD(Direction.BACK), BGA.HOLD(Direction.BACK), BGA.FULL_TO_STOP(Direction.BACK));
+
+		public static final Sequence STOPPED = new Sequence(All.STOPPED);
+
+		public String toString() {
+			StringBuilder builder = new StringBuilder("Sequence:");
+			for (double[] step : getSteps(0.0, 0.0)) {
+				builder.append("step:");
+				for (double stepPart : step) {
+					builder.append(roundedDouble(stepPart)).append(" ");
+				}
+				builder.append("\n");
+			}
+			return builder.toString();
+		}
+	}
+
+	public static class Simulation {
+		private final double[][] plannings;
+
+		public Simulation(Planning... plannings) {
+			if (plannings.length != 10) {
+				throw new IllegalArgumentException("We have 10 motors and simulation contains only "+plannings.length+" plannings");
+			}
+			this.plannings = new double[92][20];
+
+			int motor = 0;
+			for (Planning planning: plannings) {
+				int minute = 0;
+				for (double[] step : planning.getSteps()) {
+					this.plannings[minute][motor] = step[0]; // velocity
+					this.plannings[minute][motor+1] = step[1]; // speed
+					minute++;
+				}
+				motor += 2;
+			}
+		}
+
+		public double[] getFor(int minute) {
+			return plannings[minute];
+		}
+	}
+
+	public static class Planning {
+		private final List<Sequence> planning;
+		private final double initialPosition;
+		private final double initialSpeed;
+
+		public Planning(double initialPosition, double initialSpeed) {
+			this.planning = new ArrayList<Sequence>();
+			this.initialPosition = initialPosition;
+			this.initialSpeed = initialSpeed;
+		}
+
+		public Planning add(Sequence sequence) {
+			planning.add(sequence);
+			return this;
+		}
+
+		public Planning add(int repeat, Sequence sequence) {
+			for (int i = 0; i < repeat; i++) {
+				planning.add(sequence);
+			}
+			return this;
+		}
+
+		public Planning fillWith(Sequence sequence) {
+			while (!check()) {
+				add(sequence);
+			}
+			return this;
+		}
+
+		public double[][] getSteps() {
+			check();
+			double[][] steps = new double[92][2];
+			double currentPosition = initialPosition;
+			double currentSpeed = initialSpeed;
+
+			int i = 0;
+			for (Sequence sequence : planning) {
+				for (double[] step : sequence.getSteps(currentPosition, currentSpeed)) {
+					steps[i++] = step;
+					currentPosition = step[0];
+					currentSpeed = step[1];
+				}
+			}
+			return steps;
+		}
+
+		public boolean check() {
+			long size = 0;
+			for (Sequence sequence : planning) {
+				size += sequence.getSize();
+			}
+			if (size > 92) {
+				throw new IllegalStateException("You have an oversize planning");
+			}
+
+			return size == 92;
+		}
+
+		public String toString() {
+			StringBuilder builder = new StringBuilder("BGA_1:");
+			for (double[] step : getSteps()) {
+				builder.append("step:");
+				for (double stepPart : step) {
+					builder.append(roundedDouble(stepPart)).append(" ");
+				}
+				builder.append("\n");
+			}
+			return builder.toString();
+		}
+	}
+
+	public enum Direction {
+		FRONT(1.0), BACK(-1.0);
+
+		private final double signum;
+
+		Direction(double signum) {
+			this.signum = signum;
+		}
+
+		public Command applyTo(Command command) {
+			return new Command(signum * command.getPosition(), signum * command.getSpeed());
+		}
+	}
+
+	public static class All {
+		public static final Command STOPPED = new Command(0.0, 0.0);
+	}
+
+	public static class BGA {
+		public static Command STOP_TO_FULL(Direction direction) {
+			return direction.applyTo(new Command(11.875, 0.25));
+		}
+
+		public static Command HOLD(Direction direction) {
+			return direction.applyTo(new Command(15, 0.25));
+		}
+
+		public static Command FULL_TO_STOP(Direction direction) {
+			return direction.applyTo(new Command(3.125, 0.0));
+		}
+	}
+
+	public static class SARJ {
+		public static Command STOP_TO_LFULL(Direction direction) {
+			return direction.applyTo(new Command(6.75, 0.15));
+		}
+
+		public static Command HOLDL(Direction direction) {
+			return direction.applyTo(new Command(7, 0.15));
+		}
+
+		public static Command FULLL_TO_STOP(Direction direction) {
+			return direction.applyTo(new Command(2.25, 0.0));
+		}
 	}
 }

@@ -231,8 +231,7 @@
     <option name="showOnlyWarnings" value="false" />
   </component>
   <component name="libraryTable">
-    <library name="junit:junit:4.11" type="repository">
-      <properties maven-id="junit:junit:4.11" />
+    <library name="junit:junit:4.11">
       <CLASSES>
         <root url="jar://$PROJECT_DIR$/lib/junit-4.11.jar!/" />
         <root url="jar://$PROJECT_DIR$/lib/hamcrest-core-1.3.jar!/" />
@@ -240,8 +239,7 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="org.easytesting:fest-assert:1.4" type="repository">
-      <properties maven-id="org.easytesting:fest-assert:1.4" />
+    <library name="org.easytesting:fest-assert:1.4">
       <CLASSES>
         <root url="jar://$PROJECT_DIR$/lib/fest-assert-1.4.jar!/" />
         <root url="jar://$PROJECT_DIR$/lib/fest-util-1.1.6.jar!/" />

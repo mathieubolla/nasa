@@ -31,4 +31,9 @@ public class ISSTest {
 		assertThat(ISS.angle(355, 5)).isEqualTo(10.0);
 		assertThat(ISS.angle(5, 355)).isEqualTo(-10.0);
 	}
+
+	@Test
+	public void fullOfStopPlanningShouldNotMove() {
+
+	}
 }
