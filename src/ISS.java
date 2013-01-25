@@ -1,13 +1,11 @@
 import java.io.*;
 
 public class ISS {
-	public static final double SARJ_VELOCITY_LIMIT = 0.150 / 2; // per second
-	public static final double SARJ_VELOCITY_HALF = 0.075 / 2; // per second
-	//public static final double SARJ_ACCELERATION_LIMIT = 0.005; // per second, 0.3 per minute
+	public static final double SARJ_VELOCITY_LIMIT = 0.150 / 4; // per second
+	public static final double SARJ_VELOCITY_HALF = 0.075 / 4; // per second
 
-	public static final double BGA_VELOCITY_LIMIT = 0.250 / 2; // per second
-	public static final double BGA_VELOCITY_HALF = 0.125 / 2; // per second
-	//public static final double BGA_ACCELERATION_LIMIT = 0.01; // per second
+	public static final double BGA_VELOCITY_LIMIT = 0.0 / 8; // per second
+	public static final double BGA_VELOCITY_HALF = 0.0 / 8; // per second
 
 	public static final Positions INITIAL_POSITION = new Positions(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 	public static final Speeds MINUMUM_SPEED = new Speeds(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
@@ -22,24 +20,14 @@ public class ISS {
 
 		for (int minute = 0; minute <= 91; minute++) {
 			System.out.println("1");
-			System.err.println("at "+minute);
-			int i = 0;
 			for (double angle : iss.getStateAtMinute(minute)) {
-				if (i++ % 2 == 1) {
-					angle = 0.0;
-				}
 				System.out.println(roundedDouble(angle));
-				System.err.print(roundedDouble(angle) + " ");
 			}
-			System.err.println();
 			System.out.flush();
 		}
-
-		System.err.println(iss.frontCount);
 	}
 
 	private Status status = new Status(INITIAL_POSITION, MINUMUM_SPEED);
-	private int frontCount = 0;
 
 	public double getInitialOrientation(double beta) {
 		return 3.0;
@@ -47,77 +35,15 @@ public class ISS {
 
 	public double[] getStateAtMinute(int minute) {
 		Status nextStatus = null;
-		if (minute == 0) {
+		if (minute >= 0) {
 			nextStatus = status.computeNextFromCommandVector(
 				SARJCommand.FRONT_HALF, SARJCommand.FRONT_HALF,
 				BGACommand.FRONT_HALF, BGACommand.FRONT_HALF,
 				BGACommand.FRONT_HALF, BGACommand.FRONT_HALF,
 				BGACommand.FRONT_HALF, BGACommand.FRONT_HALF,
 				BGACommand.FRONT_HALF, BGACommand.FRONT_HALF);
-			frontCount++;
 		}
-		if (minute > 0 && minute < 20) {
-			nextStatus = status.computeNextFromCommandVector(
-				SARJCommand.FRONT, SARJCommand.FRONT,
-				BGACommand.FRONT, BGACommand.FRONT,
-				BGACommand.FRONT, BGACommand.FRONT,
-				BGACommand.FRONT, BGACommand.FRONT,
-				BGACommand.FRONT, BGACommand.FRONT);
-			frontCount++;
-		}
-		if (minute == 20) {
-			nextStatus = status.computeNextFromCommandVector(
-				SARJCommand.FRONT_HALF, SARJCommand.FRONT_HALF,
-				BGACommand.FRONT_HALF, BGACommand.FRONT_HALF,
-				BGACommand.FRONT_HALF, BGACommand.FRONT_HALF,
-				BGACommand.FRONT_HALF, BGACommand.FRONT_HALF,
-				BGACommand.FRONT_HALF, BGACommand.FRONT_HALF);
-			frontCount++;
-		}
-		if (minute > 20 && minute < 40) {
-			nextStatus = status.computeNextFromCommandVector(
-				SARJCommand.STOP, SARJCommand.STOP,
-				BGACommand.STOP, BGACommand.STOP,
-				BGACommand.STOP, BGACommand.STOP,
-				BGACommand.STOP, BGACommand.STOP,
-				BGACommand.STOP, BGACommand.STOP);
-		}
-		if (minute == 40) {
-			nextStatus = status.computeNextFromCommandVector(
-				SARJCommand.BACK_HALF, SARJCommand.BACK_HALF,
-				BGACommand.BACK_HALF, BGACommand.BACK_HALF,
-				BGACommand.BACK_HALF, BGACommand.BACK_HALF,
-				BGACommand.BACK_HALF, BGACommand.BACK_HALF,
-				BGACommand.BACK_HALF, BGACommand.BACK_HALF);
-			frontCount++;
-		}
-		if (minute > 40 && minute < 60) {
-			nextStatus = status.computeNextFromCommandVector(
-				SARJCommand.BACK, SARJCommand.BACK,
-				BGACommand.BACK, BGACommand.BACK,
-				BGACommand.BACK, BGACommand.BACK,
-				BGACommand.BACK, BGACommand.BACK,
-				BGACommand.BACK, BGACommand.BACK);
-			frontCount--;
-		}
-		if (minute == 60) {
-			nextStatus = status.computeNextFromCommandVector(
-				SARJCommand.BACK_HALF, SARJCommand.BACK_HALF,
-				BGACommand.BACK_HALF, BGACommand.BACK_HALF,
-				BGACommand.BACK_HALF, BGACommand.BACK_HALF,
-				BGACommand.BACK_HALF, BGACommand.BACK_HALF,
-				BGACommand.BACK_HALF, BGACommand.BACK_HALF);
-			frontCount++;
-		}
-		if (minute > 60 && minute < 80) {
-			nextStatus = status.computeNextFromCommandVector(
-				SARJCommand.STOP, SARJCommand.STOP,
-				BGACommand.STOP, BGACommand.STOP,
-				BGACommand.STOP, BGACommand.STOP,
-				BGACommand.STOP, BGACommand.STOP,
-				BGACommand.STOP, BGACommand.STOP);
-		}
-		if (minute >= 80) {
+		if (minute > 20) {
 			nextStatus = status.computeNextFromPositionVector(
 				0.0, 0.0,
 				0.0, 0.0,
