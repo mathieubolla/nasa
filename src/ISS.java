@@ -15,31 +15,30 @@ public class ISS {
 	// 3B (couplage 1A)
 	// 4B
 
-	public static final Simulation NEGATIVE = new Simulation(
-		new Planning(0.0, 0.0).add(9, Sequence.STOPPED).add(Sequence.SARJ_B90).add(9, Sequence.STOPPED).add(Sequence.SARJ_F90).add(9, Sequence.STOPPED).add(Sequence.SARJ_B90).add(9, Sequence.STOPPED).add(Sequence.SARJ_F90).fillWith(Sequence.STOPPED),
-		new Planning(0.0, 0.0).add(9, Sequence.STOPPED).add(Sequence.SARJ_B90).add(9, Sequence.STOPPED).add(Sequence.SARJ_F90).add(9, Sequence.STOPPED).add(Sequence.SARJ_B90).add(9, Sequence.STOPPED).add(Sequence.SARJ_F90).fillWith(Sequence.STOPPED),
-		new Planning(165.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).fillWith(Sequence.STOPPED),
-		new Planning(15.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).fillWith(Sequence.STOPPED),
-		new Planning(195.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).fillWith(Sequence.STOPPED),
-		new Planning(345.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).fillWith(Sequence.STOPPED),
-		new Planning(165.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).fillWith(Sequence.STOPPED),
-		new Planning(345.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).fillWith(Sequence.STOPPED),
-		new Planning(195.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).fillWith(Sequence.STOPPED),
-		new Planning(15.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).fillWith(Sequence.STOPPED)
-	);
+	public static final double REVERSE = 180.0;
+	public static final double ELEVATION = 15.0;
 
-	public static final Simulation POSITIVE = new Simulation(
-		new Planning(0.0, 0.0).add(9, Sequence.STOPPED).add(Sequence.SARJ_B90).add(9, Sequence.STOPPED).add(Sequence.SARJ_F90).add(9, Sequence.STOPPED).add(Sequence.SARJ_B90).add(9, Sequence.STOPPED).add(Sequence.SARJ_F90).fillWith(Sequence.STOPPED),
-		new Planning(0.0, 0.0).add(9, Sequence.STOPPED).add(Sequence.SARJ_B90).add(9, Sequence.STOPPED).add(Sequence.SARJ_F90).add(9, Sequence.STOPPED).add(Sequence.SARJ_B90).add(9, Sequence.STOPPED).add(Sequence.SARJ_F90).fillWith(Sequence.STOPPED),
-		new Planning(345.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).fillWith(Sequence.STOPPED),
-		new Planning(165.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).fillWith(Sequence.STOPPED),
-		new Planning(15.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).fillWith(Sequence.STOPPED),
-		new Planning(195.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).fillWith(Sequence.STOPPED),
-		new Planning(345.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).fillWith(Sequence.STOPPED),
-		new Planning(165.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).fillWith(Sequence.STOPPED),
-		new Planning(15.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).fillWith(Sequence.STOPPED),
-		new Planning(195.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).fillWith(Sequence.STOPPED)
-	);
+	// SARJ90 => 11min
+	// BGA30 => 3min
+
+	//    0   23   46   69
+	// 11.5 34.5 57.5 80.5
+	// 2A 4A 1B 3B
+
+	private static Simulation makeNegativeSimulation(double skew) {
+		return new Simulation(
+			new Planning(0.0, 0.0).add(6, Sequence.STOPPED).add(Sequence.SARJ_F90).add(12, Sequence.STOPPED).add(Sequence.SARJ_F90).add(12, Sequence.STOPPED).add(Sequence.SARJ_B90).add(12, Sequence.STOPPED).add(Sequence.SARJ_B90).fillWith(Sequence.STOPPED),
+			new Planning(0.0, 0.0).add(6, Sequence.STOPPED).add(Sequence.SARJ_B90).add(12, Sequence.STOPPED).add(Sequence.SARJ_B90).add(12, Sequence.STOPPED).add(Sequence.SARJ_F90).add(12, Sequence.STOPPED).add(Sequence.SARJ_F90).fillWith(Sequence.STOPPED),
+			new Planning(limitAngularPosition(REVERSE - ELEVATION), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_F30).add(20, Sequence.STOPPED).add(Sequence.BGA_B30).fillWith(Sequence.STOPPED),
+			new Planning(limitAngularPosition(ELEVATION + skew), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_B30).add(20, Sequence.STOPPED).add(Sequence.BGA_F30).fillWith(Sequence.STOPPED),
+			new Planning(limitAngularPosition(REVERSE + ELEVATION), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_B30).add(20, Sequence.STOPPED).add(Sequence.BGA_F30).fillWith(Sequence.STOPPED),
+			new Planning(limitAngularPosition(-ELEVATION + skew), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_F30).add(20, Sequence.STOPPED).add(Sequence.BGA_B30).fillWith(Sequence.STOPPED),
+			new Planning(limitAngularPosition(REVERSE + ELEVATION + skew), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_B30).add(20, Sequence.STOPPED).add(Sequence.BGA_F30).fillWith(Sequence.STOPPED),
+			new Planning(limitAngularPosition(-ELEVATION), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_F30).add(20, Sequence.STOPPED).add(Sequence.BGA_B30).fillWith(Sequence.STOPPED),
+			new Planning(limitAngularPosition(REVERSE - ELEVATION + skew), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_F30).add(20, Sequence.STOPPED).add(Sequence.BGA_B30).fillWith(Sequence.STOPPED),
+			new Planning(limitAngularPosition(ELEVATION), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_B30).add(20, Sequence.STOPPED).add(Sequence.BGA_F30).fillWith(Sequence.STOPPED)
+		);
+	}
 
 	private Simulation simulation;
 
@@ -61,11 +60,8 @@ public class ISS {
 	}
 
 	public double getInitialOrientation(double beta) {
-		if (beta < 0.0) {
-			simulation = NEGATIVE;
-		} else {
-			simulation = POSITIVE;
-		}
+		double skew = -((Math.abs(beta) - 70) * 6);
+		simulation = makeNegativeSimulation(skew);
 		return 0.0;
 	}
 
@@ -150,9 +146,34 @@ public class ISS {
 		}
 
 		public static final Sequence SARJ_F30 = new Sequence(SARJ.STOP_TO_LFULL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.FULLL_TO_STOP(Direction.FRONT));
-		public static final Sequence SARJ_F90 = new Sequence(SARJ.STOP_TO_LFULL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.FULLL_TO_STOP(Direction.FRONT));
+
+		public static final Sequence SARJ_F90 = new Sequence(
+			SARJ.STOP_TO_LFULL(Direction.FRONT),
+			SARJ.HOLD(Direction.FRONT),
+			SARJ.HOLD(Direction.FRONT),
+			SARJ.HOLD(Direction.FRONT),
+			SARJ.HOLD(Direction.FRONT),
+			SARJ.HOLD(Direction.FRONT),
+			SARJ.HOLD(Direction.FRONT),
+			SARJ.HOLD(Direction.FRONT),
+			SARJ.HOLD(Direction.FRONT),
+			SARJ.HOLD(Direction.FRONT),
+			SARJ.FULLL_TO_STOP(Direction.FRONT));
+
 		public static final Sequence SARJ_B30 = new Sequence(SARJ.STOP_TO_LFULL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.FULLL_TO_STOP(Direction.BACK));
-		public static final Sequence SARJ_B90 = new Sequence(SARJ.STOP_TO_LFULL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.FULLL_TO_STOP(Direction.BACK));
+
+		public static final Sequence SARJ_B90 = new Sequence(
+			SARJ.STOP_TO_LFULL(Direction.BACK),
+			SARJ.HOLD(Direction.BACK),
+			SARJ.HOLD(Direction.BACK),
+			SARJ.HOLD(Direction.BACK),
+			SARJ.HOLD(Direction.BACK),
+			SARJ.HOLD(Direction.BACK),
+			SARJ.HOLD(Direction.BACK),
+			SARJ.HOLD(Direction.BACK),
+			SARJ.HOLD(Direction.BACK),
+			SARJ.HOLD(Direction.BACK),
+			SARJ.FULLL_TO_STOP(Direction.BACK));
 
 		public static final Sequence BGA_F15 = new Sequence(BGA.STOP_TO_FULL(Direction.FRONT), BGA.FULL_TO_STOP(Direction.FRONT));
 		public static final Sequence BGA_F30 = new Sequence(BGA.STOP_TO_FULL(Direction.FRONT), BGA.HOLD(Direction.FRONT), BGA.FULL_TO_STOP(Direction.FRONT));
@@ -314,6 +335,10 @@ public class ISS {
 
 		public static Command HOLDL(Direction direction) {
 			return direction.applyTo(new Command(7, 0.15));
+		}
+
+		public static Command HOLD(Direction direction) {
+			return direction.applyTo(new Command(9, 0.15));
 		}
 
 		public static Command FULLL_TO_STOP(Direction direction) {
