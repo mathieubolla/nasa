@@ -4,25 +4,44 @@ import java.util.Collections;
 import java.util.List;
 
 public class ISS {
-	private static final double FLIGH_CONST = 0.0;
+	// SSARJ
+	// PSARJ
+	// 1A
+	// 2A
+	// 3A
+	// 4A
+	// 1B (couplage 3A)
+	// 2B
+	// 3B (couplage 1A)
+	// 4B
 
-	// 90 : horizontal
-	// 23 : vertical
-	// 47 : horizontal
-	// 69 : vertical
-
-	private Simulation simulation = new Simulation(
+	public static final Simulation NEGATIVE = new Simulation(
 		new Planning(0.0, 0.0).add(9, Sequence.STOPPED).add(Sequence.SARJ_B90).add(9, Sequence.STOPPED).add(Sequence.SARJ_F90).add(9, Sequence.STOPPED).add(Sequence.SARJ_B90).add(9, Sequence.STOPPED).add(Sequence.SARJ_F90).fillWith(Sequence.STOPPED),
 		new Planning(0.0, 0.0).add(9, Sequence.STOPPED).add(Sequence.SARJ_B90).add(9, Sequence.STOPPED).add(Sequence.SARJ_F90).add(9, Sequence.STOPPED).add(Sequence.SARJ_B90).add(9, Sequence.STOPPED).add(Sequence.SARJ_F90).fillWith(Sequence.STOPPED),
-		new Planning(180.0, 0.0 + FLIGH_CONST).fillWith(Sequence.STOPPED), //BGA1
-		new Planning(0.0, 0.0 + FLIGH_CONST).fillWith(Sequence.STOPPED), //BGA2
-		new Planning(180.0, 0.0 + FLIGH_CONST).fillWith(Sequence.STOPPED), //BGA3
-		new Planning(0.0, 0.0 + FLIGH_CONST).fillWith(Sequence.STOPPED), //BGA4
-		new Planning(180.0, 0.0 + FLIGH_CONST).fillWith(Sequence.STOPPED), //BGA5
-		new Planning(0.0, 0.0 + FLIGH_CONST).fillWith(Sequence.STOPPED), //BGA6
-		new Planning(180.0, 0.0 + FLIGH_CONST).fillWith(Sequence.STOPPED), //BGA7
-		new Planning(0.0, 0.0 + FLIGH_CONST).fillWith(Sequence.STOPPED) //BGA8
+		new Planning(165.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).fillWith(Sequence.STOPPED),
+		new Planning(15.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).fillWith(Sequence.STOPPED),
+		new Planning(195.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).fillWith(Sequence.STOPPED),
+		new Planning(345.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).fillWith(Sequence.STOPPED),
+		new Planning(165.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).fillWith(Sequence.STOPPED),
+		new Planning(345.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).fillWith(Sequence.STOPPED),
+		new Planning(195.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).fillWith(Sequence.STOPPED),
+		new Planning(15.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).fillWith(Sequence.STOPPED)
 	);
+
+	public static final Simulation POSITIVE = new Simulation(
+		new Planning(0.0, 0.0).add(9, Sequence.STOPPED).add(Sequence.SARJ_B90).add(9, Sequence.STOPPED).add(Sequence.SARJ_F90).add(9, Sequence.STOPPED).add(Sequence.SARJ_B90).add(9, Sequence.STOPPED).add(Sequence.SARJ_F90).fillWith(Sequence.STOPPED),
+		new Planning(0.0, 0.0).add(9, Sequence.STOPPED).add(Sequence.SARJ_B90).add(9, Sequence.STOPPED).add(Sequence.SARJ_F90).add(9, Sequence.STOPPED).add(Sequence.SARJ_B90).add(9, Sequence.STOPPED).add(Sequence.SARJ_F90).fillWith(Sequence.STOPPED),
+		new Planning(345.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).fillWith(Sequence.STOPPED),
+		new Planning(165.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).fillWith(Sequence.STOPPED),
+		new Planning(15.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).fillWith(Sequence.STOPPED),
+		new Planning(195.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).fillWith(Sequence.STOPPED),
+		new Planning(345.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).fillWith(Sequence.STOPPED),
+		new Planning(165.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).fillWith(Sequence.STOPPED),
+		new Planning(15.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).fillWith(Sequence.STOPPED),
+		new Planning(195.0, 0.0).add(10, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_B15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).add(22, Sequence.STOPPED).add(Sequence.BGA_F15).fillWith(Sequence.STOPPED)
+	);
+
+	private Simulation simulation;
 
 	public static void main(String... args) throws Exception {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -42,7 +61,12 @@ public class ISS {
 	}
 
 	public double getInitialOrientation(double beta) {
-		return 3.0;
+		if (beta < 0.0) {
+			simulation = NEGATIVE;
+		} else {
+			simulation = POSITIVE;
+		}
+		return 0.0;
 	}
 
 	public double[] getStateAtMinute(int minute) {
@@ -130,9 +154,11 @@ public class ISS {
 		public static final Sequence SARJ_B30 = new Sequence(SARJ.STOP_TO_LFULL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.FULLL_TO_STOP(Direction.BACK));
 		public static final Sequence SARJ_B90 = new Sequence(SARJ.STOP_TO_LFULL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.FULLL_TO_STOP(Direction.BACK));
 
+		public static final Sequence BGA_F15 = new Sequence(BGA.STOP_TO_FULL(Direction.FRONT), BGA.FULL_TO_STOP(Direction.FRONT));
 		public static final Sequence BGA_F30 = new Sequence(BGA.STOP_TO_FULL(Direction.FRONT), BGA.HOLD(Direction.FRONT), BGA.FULL_TO_STOP(Direction.FRONT));
 		public static final Sequence BGA_F45 = new Sequence(BGA.STOP_TO_FULL(Direction.FRONT), BGA.HOLD(Direction.FRONT), BGA.HOLD(Direction.FRONT), BGA.FULL_TO_STOP(Direction.FRONT));
 
+		public static final Sequence BGA_B15 = new Sequence(BGA.STOP_TO_FULL(Direction.BACK), BGA.FULL_TO_STOP(Direction.BACK));
 		public static final Sequence BGA_B30 = new Sequence(BGA.STOP_TO_FULL(Direction.BACK), BGA.HOLD(Direction.BACK), BGA.FULL_TO_STOP(Direction.BACK));
 		public static final Sequence BGA_B45 = new Sequence(BGA.STOP_TO_FULL(Direction.BACK), BGA.HOLD(Direction.BACK), BGA.HOLD(Direction.BACK), BGA.FULL_TO_STOP(Direction.BACK));
 
