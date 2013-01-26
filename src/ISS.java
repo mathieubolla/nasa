@@ -40,6 +40,21 @@ public class ISS {
 		);
 	}
 
+	private static Simulation makePositiveSimulation(double skew) {
+		return new Simulation(
+			new Planning(0.0, 0.0).add(6, Sequence.STOPPED).add(Sequence.SARJ_F90).add(12, Sequence.STOPPED).add(Sequence.SARJ_F90).add(12, Sequence.STOPPED).add(Sequence.SARJ_B90).add(12, Sequence.STOPPED).add(Sequence.SARJ_B90).fillWith(Sequence.STOPPED),
+			new Planning(0.0, 0.0).add(6, Sequence.STOPPED).add(Sequence.SARJ_B90).add(12, Sequence.STOPPED).add(Sequence.SARJ_B90).add(12, Sequence.STOPPED).add(Sequence.SARJ_F90).add(12, Sequence.STOPPED).add(Sequence.SARJ_F90).fillWith(Sequence.STOPPED),
+			new Planning(limitAngularPosition(ELEVATION + skew), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_B30).add(20, Sequence.STOPPED).add(Sequence.BGA_F30).fillWith(Sequence.STOPPED),
+			new Planning(limitAngularPosition(REVERSE - ELEVATION), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_F30).add(20, Sequence.STOPPED).add(Sequence.BGA_B30).fillWith(Sequence.STOPPED),
+			new Planning(limitAngularPosition(-ELEVATION + skew), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_F30).add(20, Sequence.STOPPED).add(Sequence.BGA_B30).fillWith(Sequence.STOPPED),
+			new Planning(limitAngularPosition(REVERSE + ELEVATION), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_B30).add(20, Sequence.STOPPED).add(Sequence.BGA_F30).fillWith(Sequence.STOPPED),
+			new Planning(limitAngularPosition(-ELEVATION), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_F30).add(20, Sequence.STOPPED).add(Sequence.BGA_B30).fillWith(Sequence.STOPPED),
+			new Planning(limitAngularPosition(REVERSE + ELEVATION + skew), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_B30).add(20, Sequence.STOPPED).add(Sequence.BGA_F30).fillWith(Sequence.STOPPED),
+			new Planning(limitAngularPosition(ELEVATION), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_B30).add(20, Sequence.STOPPED).add(Sequence.BGA_F30).fillWith(Sequence.STOPPED),
+			new Planning(limitAngularPosition(REVERSE - ELEVATION + skew), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_F30).add(20, Sequence.STOPPED).add(Sequence.BGA_B30).fillWith(Sequence.STOPPED)
+		);
+	}
+
 	private Simulation simulation;
 
 	public static void main(String... args) throws Exception {
@@ -61,7 +76,11 @@ public class ISS {
 
 	public double getInitialOrientation(double beta) {
 		double skew = -((Math.abs(beta) - 70) * 6);
-		simulation = makeNegativeSimulation(skew);
+		if (beta < 0) {
+			simulation = makeNegativeSimulation(skew);
+		} else {
+			simulation = makePositiveSimulation(skew);
+		}
 		return 0.0;
 	}
 
