@@ -28,6 +28,10 @@ public class ISS {
     private Map<Double, Double> yaws;
     private Map<Double, Double> skewFactors;
 
+    public ISS() {
+        this(Double.NaN, Double.NaN, Double.NaN, Double.NaN);
+    }
+
     public ISS(double elevation, double yaw, double skewFactor, double offsetStart) {
         this.elevation = elevation;
         this.yaw = yaw;
@@ -139,7 +143,7 @@ public class ISS {
 
 	public static void main(String... args) throws Exception {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		ISS iss = new ISS(Double.NaN, Double.NaN, Double.NaN, Double.NaN);
+		ISS iss = new ISS();
 
 		String beta = in.readLine();
 		System.out.println(iss.getInitialOrientation(Double.parseDouble(beta)));
