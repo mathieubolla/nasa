@@ -1,7 +1,5 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class ISS {
 	// SSARJ
@@ -16,58 +14,138 @@ public class ISS {
 	// 4B
 
 	public static final double REVERSE = 180.0;
-	public static final double ELEVATION = 17.0;
+    public static final double FULL_ORBIT = 360.0;
+    public static final int ORBIT_DURATION = 92;
+    public static final double ANGULAR_SPEED = FULL_ORBIT / ORBIT_DURATION / 60;
 
-	// SARJ90 => 11min
-	// BGA30 => 3min
+    private double elevation;
+    private double yaw;
+    private double skewFactor;
+    private double offsetStart;
 
-    // beta=-70 => Ajouter 15° sur 1B
+    private Map<Double, Double> offsetsStart;
+    private Map<Double, Double> elevations;
+    private Map<Double, Double> yaws;
+    private Map<Double, Double> skewFactors;
 
-	//    0   23   46   69
-	// 11.5 34.5 57.5 80.5
-	// 2A 4A 1B 3B
+    public ISS(double elevation, double yaw, double skewFactor, double offsetStart) {
+        this.elevation = elevation;
+        this.yaw = yaw;
+        this.skewFactor = skewFactor;
+        this.offsetStart = offsetStart;
 
-	private static Simulation makeNegativeSimulation(double skew, double offsetStart) {
+        offsetsStart = new HashMap<Double, Double>();
+        offsetsStart.put(-75.0, 0.0);
+        offsetsStart.put(-74.0, 0.0);
+        offsetsStart.put(-73.0, 0.0);
+        offsetsStart.put(-72.0, 0.0);
+        offsetsStart.put(-71.0, 0.0);
+        offsetsStart.put(-70.0, 5.0);
+        offsetsStart.put(75.0, 0.0);
+        offsetsStart.put(74.0, 0.0);
+        offsetsStart.put(73.0, 0.0);
+        offsetsStart.put(72.0, 0.0);
+        offsetsStart.put(71.0, 0.0);
+        offsetsStart.put(70.0, 5.0);
+
+        elevations = new HashMap<Double, Double>();
+        elevations.put(-75.0, 17.0);
+        elevations.put(-74.0, 17.0);
+        elevations.put(-73.0, 17.0);
+        elevations.put(-72.0, 17.0);
+        elevations.put(-71.0, 17.0);
+        elevations.put(-70.0, 17.0);
+        elevations.put(75.0, 17.0);
+        elevations.put(74.0, 17.0);
+        elevations.put(73.0, 17.0);
+        elevations.put(72.0, 17.0);
+        elevations.put(71.0, 17.0);
+        elevations.put(70.0, 17.0);
+
+        yaws = new HashMap<Double, Double>();
+        yaws.put(-75.0, 0.0);
+        yaws.put(-74.0, 0.0);
+        yaws.put(-73.0, 0.0);
+        yaws.put(-72.0, 0.0);
+        yaws.put(-71.0, 0.0);
+        yaws.put(-70.0, 0.0);
+        yaws.put(75.0, 0.0);
+        yaws.put(74.0, 0.0);
+        yaws.put(73.0, 0.0);
+        yaws.put(72.0, 0.0);
+        yaws.put(71.0, 0.0);
+        yaws.put(70.0, 0.0);
+
+        skewFactors = new HashMap<Double, Double>();
+        skewFactors.put(-75.0, 6.0);
+        skewFactors.put(-74.0, 6.0);
+        skewFactors.put(-73.0, 6.0);
+        skewFactors.put(-72.0, 6.0);
+        skewFactors.put(-71.0, 6.0);
+        skewFactors.put(-70.0, 6.0);
+        skewFactors.put(75.0, 6.0);
+        skewFactors.put(74.0, 6.0);
+        skewFactors.put(73.0, 6.0);
+        skewFactors.put(72.0, 6.0);
+        skewFactors.put(71.0, 6.0);
+        skewFactors.put(70.0, 6.0);
+    }
+
+    private static Simulation makeNegativeSimulation(double skew, double offsetStart, double elevation) {
         return new Simulation(
-                new Planning(offsetStart, 0.0).add(Sequence.STOPPED).add(Ramp.ramp(Direction.FRONT, 0.005, 0.15, 45, 180)).add(Ramp.ramp(Direction.FRONT, 0.005, 0.15, 45, 180)).fillWith(Sequence.STOPPED),
-                new Planning(-offsetStart, 0.0).add(Sequence.STOPPED).add(Ramp.ramp(Direction.BACK, 0.005, 0.15, 45, 180)).add(Ramp.ramp(Direction.BACK, 0.005, 0.15, 45, 180)).fillWith(Sequence.STOPPED),
-                new Planning(limitAngularPosition(REVERSE - ELEVATION), 0.0).fillWith(Sequence.STOPPED),
-                new Planning(limitAngularPosition(ELEVATION + skew), 0.0).add(45, Sequence.STOPPED).add(Ramp.ramp(Direction.BACK, 0.01, 0.25, 22, ELEVATION * 2)).add(Ramp.ramp(Direction.FRONT, 0.01, 0.25, 22, ELEVATION * 2)).fillWith(Sequence.STOPPED),
-                new Planning(limitAngularPosition(REVERSE + ELEVATION), 0.0).fillWith(Sequence.STOPPED),
-                new Planning(limitAngularPosition(-ELEVATION - skew), 0.0).add(45, Sequence.STOPPED).add(Ramp.ramp(Direction.FRONT, 0.01, 0.25, 22, ELEVATION * 2)).add(Ramp.ramp(Direction.BACK, 0.01, 0.25, 22, ELEVATION * 2)).fillWith(Sequence.STOPPED),
-                new Planning(limitAngularPosition(REVERSE + ELEVATION + skew), 0.0).fillWith(Sequence.STOPPED),
-                new Planning(limitAngularPosition(-ELEVATION), 0.0).add(45, Sequence.STOPPED).add(Ramp.ramp(Direction.FRONT, 0.01, 0.25, 22, ELEVATION * 2)).add(Ramp.ramp(Direction.BACK, 0.01, 0.25, 22, ELEVATION * 2)).fillWith(Sequence.STOPPED),
-                new Planning(limitAngularPosition(REVERSE - ELEVATION - skew), 0.0).fillWith(Sequence.STOPPED),
-                new Planning(limitAngularPosition(ELEVATION), 0.0).add(45, Sequence.STOPPED).add(Ramp.ramp(Direction.BACK, 0.01, 0.25, 22, ELEVATION * 2)).add(Ramp.ramp(Direction.FRONT, 0.01, 0.25, 22, ELEVATION * 2)).fillWith(Sequence.STOPPED)
+                new Planning(offsetStart, ANGULAR_SPEED).add(constant(Direction.FRONT)),
+                new Planning(-offsetStart, ANGULAR_SPEED).add(constant(Direction.BACK)),
+                new Planning(limitAngularPosition(REVERSE - elevation), 0.0).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(elevation + skew), 0.0).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(REVERSE + elevation), 0.0).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(-elevation - skew), 0.0).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(REVERSE + elevation + skew), 0.0).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(-elevation), 0.0).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(REVERSE - elevation - skew), 0.0).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(elevation), 0.0).fillWith(Sequence.STOPPED)
         );
 	}
 
-	private static Simulation makePositiveSimulation(double skew) {
-		return new Simulation(
-            new Planning(0.0, 0.0).add(Ramp.ramp(Direction.FRONT, 0.005, 0.15, 45, 180)).add(Ramp.ramp(Direction.FRONT, 0.005, 0.15, 45, 180)).fillWith(Sequence.STOPPED),
-            new Planning(0.0, 0.0).add(Ramp.ramp(Direction.BACK, 0.005, 0.15, 45, 180)).add(Ramp.ramp(Direction.FRONT, 0.005, 0.15, 45, 180)).fillWith(Sequence.STOPPED),
-            new Planning(limitAngularPosition(ELEVATION + skew), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_B30).add(20, Sequence.STOPPED).add(Sequence.BGA_F30).fillWith(Sequence.STOPPED),
-			new Planning(limitAngularPosition(REVERSE - ELEVATION), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_F30).add(20, Sequence.STOPPED).add(Sequence.BGA_B30).fillWith(Sequence.STOPPED),
-			new Planning(limitAngularPosition(-ELEVATION + skew), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_F30).add(20, Sequence.STOPPED).add(Sequence.BGA_B30).fillWith(Sequence.STOPPED),
-			new Planning(limitAngularPosition(REVERSE + ELEVATION), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_B30).add(20, Sequence.STOPPED).add(Sequence.BGA_F30).fillWith(Sequence.STOPPED),
-			new Planning(limitAngularPosition(-ELEVATION), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_F30).add(20, Sequence.STOPPED).add(Sequence.BGA_B30).fillWith(Sequence.STOPPED),
-			new Planning(limitAngularPosition(REVERSE + ELEVATION + skew), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_B30).add(20, Sequence.STOPPED).add(Sequence.BGA_F30).fillWith(Sequence.STOPPED),
-			new Planning(limitAngularPosition(ELEVATION), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_B30).add(20, Sequence.STOPPED).add(Sequence.BGA_F30).fillWith(Sequence.STOPPED),
-			new Planning(limitAngularPosition(REVERSE - ELEVATION + skew), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_F30).add(20, Sequence.STOPPED).add(Sequence.BGA_B30).fillWith(Sequence.STOPPED)
-		);
-	}
+    private static Simulation makePositiveSimulation(double skew, double offsetStart, double elevation) {
+        return new Simulation(
+                new Planning(offsetStart, ANGULAR_SPEED).add(constant(Direction.FRONT)),
+                new Planning(-offsetStart, ANGULAR_SPEED).add(constant(Direction.BACK)),
+                new Planning(limitAngularPosition(elevation + skew), 0.0).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(REVERSE - elevation), 0.0).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(-elevation + skew), 0.0).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(REVERSE + elevation), 0.0).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(-elevation), 0.0).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(REVERSE + elevation + skew), 0.0).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(elevation), 0.0).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(REVERSE - elevation + skew), 0.0).fillWith(Sequence.STOPPED)
+        );
+    }
 
 	private Simulation simulation;
 
+    private void setFlightConstants(double beta) {
+        elevation = getConstant(elevation, elevations, beta);
+        yaw = getConstant(yaw, yaws, beta);
+        skewFactor = getConstant(skewFactor, skewFactors, beta);
+        offsetStart = getConstant(offsetStart, offsetsStart, beta);
+    }
+
+    private double getConstant(double currentValue, Map<Double, Double> source, double beta) {
+        if (!Double.isNaN(currentValue)) {
+            return currentValue;
+        }
+        return source.get(beta);
+    }
+
 	public static void main(String... args) throws Exception {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		ISS iss = new ISS();
+		ISS iss = new ISS(Double.NaN, Double.NaN, Double.NaN, Double.NaN);
 
 		String beta = in.readLine();
 		System.out.println(iss.getInitialOrientation(Double.parseDouble(beta)));
 		System.out.flush();
 
-		for (int minute = 0; minute <= 91; minute++) {
+		for (int minute = 0; minute < ORBIT_DURATION; minute++) {
 			System.out.println("1");
 			for (double angle : iss.getStateAtMinute(minute)) {
 				System.out.println(roundedDouble(angle));
@@ -77,13 +155,15 @@ public class ISS {
 	}
 
 	public double getInitialOrientation(double beta) {
-		double skew = -((Math.abs(beta) - 70) * 6);
+        setFlightConstants(beta);
+
+        double skew = -((Math.abs(beta) - 70) * skewFactor);
 		if (beta < 0) {
-			simulation = makeNegativeSimulation(skew, Math.abs(beta) == 70 ? 5.0 : 0.0);
+            simulation = makeNegativeSimulation(skew, offsetStart, elevation);
 		} else {
-			simulation = makePositiveSimulation(skew);
+			simulation = makePositiveSimulation(skew, offsetStart, elevation);
 		}
-		return 0.0;
+        return yaw;
 	}
 
 	public double[] getStateAtMinute(int minute) {
@@ -109,16 +189,6 @@ public class ISS {
 	public static double limitAngularPosition(double value) {
 		double modulo = value % 360;
 		return modulo >= 0.0 ? modulo : 360 + modulo;
-	}
-
-	public static double angle(double a, double b) {
-		double delta = limitAngularPosition(b - a);
-
-		if (delta > 180) {
-			return delta - 360;
-		}
-
-		return delta;
 	}
 
 	public static class Command {
@@ -151,45 +221,26 @@ public class ISS {
 			return commands.size();
 		}
 
-		public double[][] getSteps(double originalPosition, double originalSpeed) {
+		public double[][] getSteps(double originalPosition) {
 			double[][] steps = new double[(int)getSize()][2];
 			double position = originalPosition;
-			double speed = originalSpeed;
-			for (int i = 0; i < getSize(); i++) {
+            for (int i = 0; i < getSize(); i++) {
 				Command command = commands.get(i);
 				position = limitAngularPosition(position + command.getPosition());
-				speed = command.getSpeed();
 
-				steps[i][0] = position;
-				steps[i][1] = speed;
+                steps[i][0] = position;
+				steps[i][1] = command.getSpeed();
 			}
 			return steps;
 		}
 
-		public static final Sequence BGA_F30 = new Sequence(BGA.STOP_TO_FULL(Direction.FRONT), BGA.HOLD(Direction.FRONT), BGA.FULL_TO_STOP(Direction.FRONT));
-		public static final Sequence BGA_B30 = new Sequence(BGA.STOP_TO_FULL(Direction.BACK), BGA.HOLD(Direction.BACK), BGA.FULL_TO_STOP(Direction.BACK));
 		public static final Sequence STOPPED = new Sequence(All.STOPPED);
-
-		public String toString() {
-			StringBuilder builder = new StringBuilder("Sequence:");
-			for (double[] step : getSteps(0.0, 0.0)) {
-				builder.append("step:");
-				for (double stepPart : step) {
-					builder.append(roundedDouble(stepPart)).append(" ");
-				}
-				builder.append("\n");
-			}
-			return builder.toString();
-		}
 	}
 
 	public static class Simulation {
 		private final double[][] plannings;
 
 		public Simulation(Planning... plannings) {
-			if (plannings.length != 10) {
-				throw new IllegalArgumentException("We have 10 motors and simulation contains only "+plannings.length+" plannings");
-			}
 			this.plannings = new double[92][20];
 
 			int motor = 0;
@@ -225,13 +276,6 @@ public class ISS {
 			return this;
 		}
 
-		public Planning add(int repeat, Sequence sequence) {
-			for (int i = 0; i < repeat; i++) {
-				planning.add(sequence);
-			}
-			return this;
-		}
-
 		public Planning fillWith(Sequence sequence) {
 			while (!check()) {
 				add(sequence);
@@ -243,14 +287,12 @@ public class ISS {
 			check();
 			double[][] steps = new double[92][2];
 			double currentPosition = initialPosition;
-			double currentSpeed = initialSpeed;
 
 			int i = 0;
 			for (Sequence sequence : planning) {
-				for (double[] step : sequence.getSteps(currentPosition, currentSpeed)) {
+				for (double[] step : sequence.getSteps(currentPosition)) {
 					steps[i++] = step;
 					currentPosition = step[0];
-					currentSpeed = step[1];
 				}
 			}
 			return steps;
@@ -266,18 +308,6 @@ public class ISS {
 			}
 
 			return size == 92;
-		}
-
-		public String toString() {
-			StringBuilder builder = new StringBuilder("BGA_1:");
-			for (double[] step : getSteps()) {
-				builder.append("step:");
-				for (double stepPart : step) {
-					builder.append(roundedDouble(stepPart)).append(" ");
-				}
-				builder.append("\n");
-			}
-			return builder.toString();
 		}
 	}
 
@@ -299,64 +329,12 @@ public class ISS {
 		public static final Command STOPPED = new Command(0.0, 0.0);
 	}
 
-	public static class BGA {
-		public static Command STOP_TO_FULL(Direction direction) {
-			return direction.applyTo(new Command(11.875, 0.25));
-		}
-
-		public static Command HOLD(Direction direction) {
-			return direction.applyTo(new Command(15, 0.25));
-		}
-
-		public static Command FULL_TO_STOP(Direction direction) {
-			return direction.applyTo(new Command(3.125, 0.0));
-		}
-	}
-
-	public static class SARJ {
-		public static Command STOP_TO_LFULL(Direction direction) {
-			return direction.applyTo(new Command(6.75, 0.15));
-		}
-
-		public static Command HOLDL(Direction direction) {
-			return direction.applyTo(new Command(7, 0.15));
-		}
-
-		public static Command HOLD(Direction direction) {
-			return direction.applyTo(new Command(9, 0.15));
-		}
-
-		public static Command FULLL_TO_STOP(Direction direction) {
-			return direction.applyTo(new Command(2.25, 0.0));
-		}
-
-        public static Command SLOW_MOTION_STOP_TO_FULL(Direction direction) {
-            return direction.applyTo(new Command(4, 0.068));
+    public static Sequence constant(Direction direction) {
+        Command[] commands = new Command[ORBIT_DURATION];
+        for (int i = 0; i < ORBIT_DURATION; i++) {
+            commands[i] = direction.applyTo(new Command(ANGULAR_SPEED * 60, ANGULAR_SPEED));
         }
 
-        public static Command SLOW_MOTION_HOLD(Direction direction) {
-            return direction.applyTo(new Command(4, 0.068));
-        }
-
-        public static Command SLOW_MOTION_FULL_TO_STOP(Direction direction) {
-            return direction.applyTo(new Command(4, 0.0));
-        }
-	}
-
-    public static class Ramp {
-        public static Sequence ramp(Direction direction, double maxAcceleration, double maxSpeed, int duration, double angle) {
-            double angularSpeed = angle / (duration * 60); // ° per min
-            if (angularSpeed > maxSpeed) {
-                throw new IllegalArgumentException("Angular speed "+angularSpeed+" exceeds maximum speed "+maxSpeed);
-            }
-
-            Command[] commands = new Command[duration];
-            for (int i = 0; i < duration; i++) {
-                commands[i] = direction.applyTo(new Command(angularSpeed * 60, angularSpeed));
-            }
-            commands[duration-1] = direction.applyTo(new Command(angularSpeed * 60, 0.0)); // erase last command to stop motors
-
-            return new Sequence(commands);
-        }
+        return new Sequence(commands);
     }
 }

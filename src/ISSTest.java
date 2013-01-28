@@ -24,15 +24,6 @@ public class ISSTest {
 	}
 
 	@Test
-	public void shouldComputeAngles() {
-		assertThat(ISS.angle(10, 10)).isEqualTo(0.0);
-		assertThat(ISS.angle(10, 20)).isEqualTo(10.0);
-		assertThat(ISS.angle(20, 10)).isEqualTo(-10.0);
-		assertThat(ISS.angle(355, 5)).isEqualTo(10.0);
-		assertThat(ISS.angle(5, 355)).isEqualTo(-10.0);
-	}
-
-	@Test
 	public void fullOfStopPlanningShouldNotMove() {
 
 	}
