@@ -142,8 +142,14 @@ public class ISS {
     }
 
 	public static void main(String... args) throws Exception {
+        ISS iss;
+        if (args.length == 4) {
+            iss = new ISS(Double.parseDouble(args[0]), Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3]));
+        } else {
+            iss = new ISS();
+        }
+
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		ISS iss = new ISS();
 
 		String beta = in.readLine();
 		System.out.println(iss.getInitialOrientation(Double.parseDouble(beta)));
