@@ -16,35 +16,37 @@ public class ISS {
 	// 4B
 
 	public static final double REVERSE = 180.0;
-	public static final double ELEVATION = 15.0;
+	public static final double ELEVATION = 17.0;
 
 	// SARJ90 => 11min
 	// BGA30 => 3min
+
+    // beta=-70 => Ajouter 15° sur 1B
 
 	//    0   23   46   69
 	// 11.5 34.5 57.5 80.5
 	// 2A 4A 1B 3B
 
-	private static Simulation makeNegativeSimulation(double skew) {
-		return new Simulation(
-			new Planning(0.0, 0.0).add(6, Sequence.STOPPED).add(Sequence.SARJ_F90).add(12, Sequence.STOPPED).add(Sequence.SARJ_F90).add(12, Sequence.STOPPED).add(Sequence.SARJ_B90).add(12, Sequence.STOPPED).add(Sequence.SARJ_B90).fillWith(Sequence.STOPPED),
-			new Planning(0.0, 0.0).add(6, Sequence.STOPPED).add(Sequence.SARJ_B90).add(12, Sequence.STOPPED).add(Sequence.SARJ_B90).add(12, Sequence.STOPPED).add(Sequence.SARJ_F90).add(12, Sequence.STOPPED).add(Sequence.SARJ_F90).fillWith(Sequence.STOPPED),
-			new Planning(limitAngularPosition(REVERSE - ELEVATION), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_F30).add(20, Sequence.STOPPED).add(Sequence.BGA_B30).fillWith(Sequence.STOPPED),
-			new Planning(limitAngularPosition(ELEVATION + skew), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_B30).add(20, Sequence.STOPPED).add(Sequence.BGA_F30).fillWith(Sequence.STOPPED),
-			new Planning(limitAngularPosition(REVERSE + ELEVATION), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_B30).add(20, Sequence.STOPPED).add(Sequence.BGA_F30).fillWith(Sequence.STOPPED),
-			new Planning(limitAngularPosition(-ELEVATION + skew), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_F30).add(20, Sequence.STOPPED).add(Sequence.BGA_B30).fillWith(Sequence.STOPPED),
-			new Planning(limitAngularPosition(REVERSE + ELEVATION + skew), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_B30).add(20, Sequence.STOPPED).add(Sequence.BGA_F30).fillWith(Sequence.STOPPED),
-			new Planning(limitAngularPosition(-ELEVATION), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_F30).add(20, Sequence.STOPPED).add(Sequence.BGA_B30).fillWith(Sequence.STOPPED),
-			new Planning(limitAngularPosition(REVERSE - ELEVATION + skew), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_F30).add(20, Sequence.STOPPED).add(Sequence.BGA_B30).fillWith(Sequence.STOPPED),
-			new Planning(limitAngularPosition(ELEVATION), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_B30).add(20, Sequence.STOPPED).add(Sequence.BGA_F30).fillWith(Sequence.STOPPED)
-		);
+	private static Simulation makeNegativeSimulation(double skew, double offsetStart) {
+        return new Simulation(
+                new Planning(offsetStart, 0.0).add(Sequence.STOPPED).add(Ramp.ramp(Direction.FRONT, 0.005, 0.15, 45, 180)).add(Ramp.ramp(Direction.FRONT, 0.005, 0.15, 45, 180)).fillWith(Sequence.STOPPED),
+                new Planning(-offsetStart, 0.0).add(Sequence.STOPPED).add(Ramp.ramp(Direction.BACK, 0.005, 0.15, 45, 180)).add(Ramp.ramp(Direction.BACK, 0.005, 0.15, 45, 180)).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(REVERSE - ELEVATION), 0.0).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(ELEVATION + skew), 0.0).add(45, Sequence.STOPPED).add(Ramp.ramp(Direction.BACK, 0.01, 0.25, 22, ELEVATION * 2)).add(Ramp.ramp(Direction.FRONT, 0.01, 0.25, 22, ELEVATION * 2)).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(REVERSE + ELEVATION), 0.0).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(-ELEVATION - skew), 0.0).add(45, Sequence.STOPPED).add(Ramp.ramp(Direction.FRONT, 0.01, 0.25, 22, ELEVATION * 2)).add(Ramp.ramp(Direction.BACK, 0.01, 0.25, 22, ELEVATION * 2)).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(REVERSE + ELEVATION + skew), 0.0).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(-ELEVATION), 0.0).add(45, Sequence.STOPPED).add(Ramp.ramp(Direction.FRONT, 0.01, 0.25, 22, ELEVATION * 2)).add(Ramp.ramp(Direction.BACK, 0.01, 0.25, 22, ELEVATION * 2)).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(REVERSE - ELEVATION - skew), 0.0).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(ELEVATION), 0.0).add(45, Sequence.STOPPED).add(Ramp.ramp(Direction.BACK, 0.01, 0.25, 22, ELEVATION * 2)).add(Ramp.ramp(Direction.FRONT, 0.01, 0.25, 22, ELEVATION * 2)).fillWith(Sequence.STOPPED)
+        );
 	}
 
 	private static Simulation makePositiveSimulation(double skew) {
 		return new Simulation(
-			new Planning(0.0, 0.0).add(6, Sequence.STOPPED).add(Sequence.SARJ_F90).add(12, Sequence.STOPPED).add(Sequence.SARJ_F90).add(12, Sequence.STOPPED).add(Sequence.SARJ_B90).add(12, Sequence.STOPPED).add(Sequence.SARJ_B90).fillWith(Sequence.STOPPED),
-			new Planning(0.0, 0.0).add(6, Sequence.STOPPED).add(Sequence.SARJ_B90).add(12, Sequence.STOPPED).add(Sequence.SARJ_B90).add(12, Sequence.STOPPED).add(Sequence.SARJ_F90).add(12, Sequence.STOPPED).add(Sequence.SARJ_F90).fillWith(Sequence.STOPPED),
-			new Planning(limitAngularPosition(ELEVATION + skew), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_B30).add(20, Sequence.STOPPED).add(Sequence.BGA_F30).fillWith(Sequence.STOPPED),
+            new Planning(0.0, 0.0).add(Ramp.ramp(Direction.FRONT, 0.005, 0.15, 45, 180)).add(Ramp.ramp(Direction.FRONT, 0.005, 0.15, 45, 180)).fillWith(Sequence.STOPPED),
+            new Planning(0.0, 0.0).add(Ramp.ramp(Direction.BACK, 0.005, 0.15, 45, 180)).add(Ramp.ramp(Direction.FRONT, 0.005, 0.15, 45, 180)).fillWith(Sequence.STOPPED),
+            new Planning(limitAngularPosition(ELEVATION + skew), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_B30).add(20, Sequence.STOPPED).add(Sequence.BGA_F30).fillWith(Sequence.STOPPED),
 			new Planning(limitAngularPosition(REVERSE - ELEVATION), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_F30).add(20, Sequence.STOPPED).add(Sequence.BGA_B30).fillWith(Sequence.STOPPED),
 			new Planning(limitAngularPosition(-ELEVATION + skew), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_F30).add(20, Sequence.STOPPED).add(Sequence.BGA_B30).fillWith(Sequence.STOPPED),
 			new Planning(limitAngularPosition(REVERSE + ELEVATION), 0.0).add(56, Sequence.STOPPED).add(Sequence.BGA_B30).add(20, Sequence.STOPPED).add(Sequence.BGA_F30).fillWith(Sequence.STOPPED),
@@ -77,7 +79,7 @@ public class ISS {
 	public double getInitialOrientation(double beta) {
 		double skew = -((Math.abs(beta) - 70) * 6);
 		if (beta < 0) {
-			simulation = makeNegativeSimulation(skew);
+			simulation = makeNegativeSimulation(skew, Math.abs(beta) == 70 ? 5.0 : 0.0);
 		} else {
 			simulation = makePositiveSimulation(skew);
 		}
@@ -164,44 +166,8 @@ public class ISS {
 			return steps;
 		}
 
-		public static final Sequence SARJ_F30 = new Sequence(SARJ.STOP_TO_LFULL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.HOLDL(Direction.FRONT), SARJ.FULLL_TO_STOP(Direction.FRONT));
-
-		public static final Sequence SARJ_F90 = new Sequence(
-			SARJ.STOP_TO_LFULL(Direction.FRONT),
-			SARJ.HOLD(Direction.FRONT),
-			SARJ.HOLD(Direction.FRONT),
-			SARJ.HOLD(Direction.FRONT),
-			SARJ.HOLD(Direction.FRONT),
-			SARJ.HOLD(Direction.FRONT),
-			SARJ.HOLD(Direction.FRONT),
-			SARJ.HOLD(Direction.FRONT),
-			SARJ.HOLD(Direction.FRONT),
-			SARJ.HOLD(Direction.FRONT),
-			SARJ.FULLL_TO_STOP(Direction.FRONT));
-
-		public static final Sequence SARJ_B30 = new Sequence(SARJ.STOP_TO_LFULL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.HOLDL(Direction.BACK), SARJ.FULLL_TO_STOP(Direction.BACK));
-
-		public static final Sequence SARJ_B90 = new Sequence(
-			SARJ.STOP_TO_LFULL(Direction.BACK),
-			SARJ.HOLD(Direction.BACK),
-			SARJ.HOLD(Direction.BACK),
-			SARJ.HOLD(Direction.BACK),
-			SARJ.HOLD(Direction.BACK),
-			SARJ.HOLD(Direction.BACK),
-			SARJ.HOLD(Direction.BACK),
-			SARJ.HOLD(Direction.BACK),
-			SARJ.HOLD(Direction.BACK),
-			SARJ.HOLD(Direction.BACK),
-			SARJ.FULLL_TO_STOP(Direction.BACK));
-
-		public static final Sequence BGA_F15 = new Sequence(BGA.STOP_TO_FULL(Direction.FRONT), BGA.FULL_TO_STOP(Direction.FRONT));
 		public static final Sequence BGA_F30 = new Sequence(BGA.STOP_TO_FULL(Direction.FRONT), BGA.HOLD(Direction.FRONT), BGA.FULL_TO_STOP(Direction.FRONT));
-		public static final Sequence BGA_F45 = new Sequence(BGA.STOP_TO_FULL(Direction.FRONT), BGA.HOLD(Direction.FRONT), BGA.HOLD(Direction.FRONT), BGA.FULL_TO_STOP(Direction.FRONT));
-
-		public static final Sequence BGA_B15 = new Sequence(BGA.STOP_TO_FULL(Direction.BACK), BGA.FULL_TO_STOP(Direction.BACK));
 		public static final Sequence BGA_B30 = new Sequence(BGA.STOP_TO_FULL(Direction.BACK), BGA.HOLD(Direction.BACK), BGA.FULL_TO_STOP(Direction.BACK));
-		public static final Sequence BGA_B45 = new Sequence(BGA.STOP_TO_FULL(Direction.BACK), BGA.HOLD(Direction.BACK), BGA.HOLD(Direction.BACK), BGA.FULL_TO_STOP(Direction.BACK));
-
 		public static final Sequence STOPPED = new Sequence(All.STOPPED);
 
 		public String toString() {
@@ -363,5 +329,34 @@ public class ISS {
 		public static Command FULLL_TO_STOP(Direction direction) {
 			return direction.applyTo(new Command(2.25, 0.0));
 		}
+
+        public static Command SLOW_MOTION_STOP_TO_FULL(Direction direction) {
+            return direction.applyTo(new Command(4, 0.068));
+        }
+
+        public static Command SLOW_MOTION_HOLD(Direction direction) {
+            return direction.applyTo(new Command(4, 0.068));
+        }
+
+        public static Command SLOW_MOTION_FULL_TO_STOP(Direction direction) {
+            return direction.applyTo(new Command(4, 0.0));
+        }
 	}
+
+    public static class Ramp {
+        public static Sequence ramp(Direction direction, double maxAcceleration, double maxSpeed, int duration, double angle) {
+            double angularSpeed = angle / (duration * 60); // ° per min
+            if (angularSpeed > maxSpeed) {
+                throw new IllegalArgumentException("Angular speed "+angularSpeed+" exceeds maximum speed "+maxSpeed);
+            }
+
+            Command[] commands = new Command[duration];
+            for (int i = 0; i < duration; i++) {
+                commands[i] = direction.applyTo(new Command(angularSpeed * 60, angularSpeed));
+            }
+            commands[duration-1] = direction.applyTo(new Command(angularSpeed * 60, 0.0)); // erase last command to stop motors
+
+            return new Sequence(commands);
+        }
+    }
 }
