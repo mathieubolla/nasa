@@ -91,7 +91,7 @@ public class ISS {
         skewFactors.put(74.0, 6.0);
         skewFactors.put(73.0, 6.0);
         skewFactors.put(72.0, 0.0);
-        skewFactors.put(71.0, 6.0);
+        skewFactors.put(71.0, 0.0);
         skewFactors.put(70.0, 6.0);
     }
 
@@ -116,12 +116,12 @@ public class ISS {
                 new Planning(-offsetStart, ANGULAR_SPEED).add(constant(Direction.BACK)),
                 new Planning(limitAngularPosition(elevation + skew), 0.0).fillWith(Sequence.STOPPED),
                 new Planning(limitAngularPosition(REVERSE - elevation), 0.0).fillWith(Sequence.STOPPED),
-                new Planning(limitAngularPosition(-elevation + skew), 0.0).fillWith(Sequence.STOPPED),
+                new Planning(limitAngularPosition(-elevation - skew), 0.0).fillWith(Sequence.STOPPED),
                 new Planning(limitAngularPosition(REVERSE + elevation), 0.0).fillWith(Sequence.STOPPED),
                 new Planning(limitAngularPosition(-elevation), 0.0).fillWith(Sequence.STOPPED),
                 new Planning(limitAngularPosition(REVERSE + elevation + skew), 0.0).fillWith(Sequence.STOPPED),
                 new Planning(limitAngularPosition(elevation), 0.0).fillWith(Sequence.STOPPED),
-                new Planning(limitAngularPosition(REVERSE - elevation + skew), 0.0).fillWith(Sequence.STOPPED)
+                new Planning(limitAngularPosition(REVERSE - elevation - skew), 0.0).fillWith(Sequence.STOPPED)
         );
     }
 
