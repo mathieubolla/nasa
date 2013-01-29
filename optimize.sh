@@ -1,15 +1,32 @@
 #!/bin/bash
 
-elevation=17.0
-skewFactor=6.0
-offsetStart=0.0
+echo "Compiling solution"
+javac src/ISS.java
 
-for beta in "70" "71" "72" "73" "74" "75" "-70" "-71" "-72" "-73" "-74" "-75"
+echo "Clearing results"
+rm -rf results/*
+
+for beta in "-70" "70" "-75" "75" "-72" "72" "71" "73" "74" "-71" "-73" "-74"
 do
 
-for yaw in "0.0" "3.0" "5.0" "7.0"
+for yaw in "0.0" "3.5" "7.0"
 do
-    javac src/ISS.java && java -jar resources/ISSVis.jar -exec "java -cp src/ ISS 17.0 ${yaw} 6.0 0.0" -model resources/ISS_simple.model -beta ${beta} > results/res:$beta:$elevation:$yaw:$skewFactor:$offsetStart:results:visu
-    grep \"Score\" results/res:$beta:$elevation:$yaw:$skewFactor:$offsetStart:results:visu | cut -d " " -f 3 > results/res:$beta:$elevation:$yaw:$skewFactor:$offsetStart:results:final
+
+for elevation in "12.0" "15.0" "17.0" "19.0" "22.0"
+do
+
+for skewFactor in "0.0" "6.0" "12.0"
+do
+
+for offsetStart in "355.0" "0.0" "5.0" "10.0"
+do
+	filename=results/res:$beta:$elevation:$yaw:$skewFactor:$offsetStart
+	echo "Processing ${filename}"
+    java -jar resources/ISSVis.jar -exec "java -cp src/ ISS ${elevation} ${yaw} ${skewFactor} ${offsetStart}" -model resources/ISS_simple.model -beta ${beta} > ${filename}
+    tail -n 1 ${filename}
+    echo ${filename} >> ${filename}
+done
+done
+done
 done
 done
