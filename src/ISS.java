@@ -39,9 +39,9 @@ public class ISS {
         this.offsetStart = offsetStart;
 
         offsetsStart = new HashMap<Double, Double>();
-        offsetsStart.put(-75.0, 0.0);
-        offsetsStart.put(-74.0, 0.0);
-        offsetsStart.put(-73.0, 0.0);
+        offsetsStart.put(-75.0, 355.0);
+        offsetsStart.put(-74.0, 355.0);
+        offsetsStart.put(-73.0, 355.0);
         offsetsStart.put(-72.0, 0.0);
         offsetsStart.put(-71.0, 0.0);
         offsetsStart.put(-70.0, 5.0);
@@ -50,21 +50,21 @@ public class ISS {
         offsetsStart.put(73.0, 0.0);
         offsetsStart.put(72.0, 0.0);
         offsetsStart.put(71.0, 0.0);
-        offsetsStart.put(70.0, 5.0);
+        offsetsStart.put(70.0, 0.0);
 
         elevations = new HashMap<Double, Double>();
-        elevations.put(-75.0, 17.0);
-        elevations.put(-74.0, 17.0);
-        elevations.put(-73.0, 17.0);
-        elevations.put(-72.0, 17.0);
-        elevations.put(-71.0, 17.0);
-        elevations.put(-70.0, 17.0);
+        elevations.put(-75.0, 22.0);
+        elevations.put(-74.0, 21.0);
+        elevations.put(-73.0, 20.0);
+        elevations.put(-72.0, 19.0);
+        elevations.put(-71.0, 19.0);
+        elevations.put(-70.0, 19.0);
         elevations.put(75.0, 17.0);
-        elevations.put(74.0, 17.0);
-        elevations.put(73.0, 17.0);
-        elevations.put(72.0, 17.0);
-        elevations.put(71.0, 17.0);
-        elevations.put(70.0, 17.0);
+        elevations.put(74.0, 18.0);
+        elevations.put(73.0, 18.0);
+        elevations.put(72.0, 19.0);
+        elevations.put(71.0, 19.0);
+        elevations.put(70.0, 19.0);
 
         yaws = new HashMap<Double, Double>();
         yaws.put(-75.0, 0.0);
@@ -84,13 +84,13 @@ public class ISS {
         skewFactors.put(-75.0, 6.0);
         skewFactors.put(-74.0, 6.0);
         skewFactors.put(-73.0, 6.0);
-        skewFactors.put(-72.0, 6.0);
+        skewFactors.put(-72.0, 0.0);
         skewFactors.put(-71.0, 6.0);
         skewFactors.put(-70.0, 6.0);
         skewFactors.put(75.0, 6.0);
         skewFactors.put(74.0, 6.0);
         skewFactors.put(73.0, 6.0);
-        skewFactors.put(72.0, 6.0);
+        skewFactors.put(72.0, 0.0);
         skewFactors.put(71.0, 6.0);
         skewFactors.put(70.0, 6.0);
     }
