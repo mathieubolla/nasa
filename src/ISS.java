@@ -19,80 +19,76 @@ public class ISS {
     public static final double ANGULAR_SPEED = FULL_ORBIT / ORBIT_DURATION / 60;
 
     private double elevation;
-    private double yaw;
     private double skewFactor;
     private double offsetStart;
 
     private Map<Double, Double> offsetsStart;
     private Map<Double, Double> elevations;
-    private Map<Double, Double> yaws;
     private Map<Double, Double> skewFactors;
 
     public ISS() {
-        this(Double.NaN, Double.NaN, Double.NaN, Double.NaN);
+        this(Double.NaN, Double.NaN, Double.NaN);
     }
 
-    public ISS(double elevation, double yaw, double skewFactor, double offsetStart) {
+    public ISS(double elevation, double skewFactor, double offsetStart) {
         this.elevation = elevation;
-        this.yaw = yaw;
         this.skewFactor = skewFactor;
         this.offsetStart = offsetStart;
+
+        // -75 21.0 0.0 6.0 355.0
+		// -74 21.0 0.0 6.0 355.0
+		// -73 15.0 0.0 3.0 355.0 // partial
+		// -72 19.0 0.0 0.0 355.0
+		// -71 19.0 0.0 0.0 355.0
+		// -70 19.0 0.0 0.0   5.0
+ 		// 70 21.0 0.0 6.0   0.0
+ 		// 71 19.0 0.0 0.0 355.0
+ 		// 72 19.0 0.0 0.0   0.0
+ 		// 73 23.0 0.0 6.0   0.0 // partial
+ 		// 74 19.0 0.0 6.0   0.0 // partial
+ 		// 75 21.0 0.0 6.0 355.0
 
         offsetsStart = new HashMap<Double, Double>();
         offsetsStart.put(-75.0, 355.0);
         offsetsStart.put(-74.0, 355.0);
         offsetsStart.put(-73.0, 355.0);
-        offsetsStart.put(-72.0, 0.0);
-        offsetsStart.put(-71.0, 0.0);
+        offsetsStart.put(-72.0, 355.0);
+        offsetsStart.put(-71.0, 355.0);
         offsetsStart.put(-70.0, 5.0);
-        offsetsStart.put(75.0, 0.0);
-        offsetsStart.put(74.0, 0.0);
-        offsetsStart.put(73.0, 0.0);
-        offsetsStart.put(72.0, 0.0);
-        offsetsStart.put(71.0, 0.0);
         offsetsStart.put(70.0, 0.0);
+		offsetsStart.put(71.0, 355.0);
+        offsetsStart.put(72.0, 0.0);
+		offsetsStart.put(73.0, 0.0);
+        offsetsStart.put(74.0, 0.0);
+        offsetsStart.put(75.0, 355.0);
 
         elevations = new HashMap<Double, Double>();
-        elevations.put(-75.0, 22.0);
+        elevations.put(-75.0, 21.0);
         elevations.put(-74.0, 21.0);
-        elevations.put(-73.0, 20.0);
+        elevations.put(-73.0, 15.0);
         elevations.put(-72.0, 19.0);
         elevations.put(-71.0, 19.0);
         elevations.put(-70.0, 19.0);
-        elevations.put(75.0, 17.0);
-        elevations.put(74.0, 18.0);
-        elevations.put(73.0, 18.0);
+        elevations.put(70.0, 21.0);
+		elevations.put(71.0, 19.0);
         elevations.put(72.0, 19.0);
-        elevations.put(71.0, 19.0);
-        elevations.put(70.0, 19.0);
-
-        yaws = new HashMap<Double, Double>();
-        yaws.put(-75.0, 0.0);
-        yaws.put(-74.0, 0.0);
-        yaws.put(-73.0, 0.0);
-        yaws.put(-72.0, 0.0);
-        yaws.put(-71.0, 0.0);
-        yaws.put(-70.0, 0.0);
-        yaws.put(75.0, 0.0);
-        yaws.put(74.0, 0.0);
-        yaws.put(73.0, 0.0);
-        yaws.put(72.0, 0.0);
-        yaws.put(71.0, 0.0);
-        yaws.put(70.0, 0.0);
+		elevations.put(73.0, 23.0);
+        elevations.put(74.0, 19.0);
+        elevations.put(75.0, 21.0);
 
         skewFactors = new HashMap<Double, Double>();
         skewFactors.put(-75.0, 6.0);
         skewFactors.put(-74.0, 6.0);
-        skewFactors.put(-73.0, 6.0);
+        skewFactors.put(-73.0, 3.0);
         skewFactors.put(-72.0, 0.0);
-        skewFactors.put(-71.0, 6.0);
-        skewFactors.put(-70.0, 6.0);
-        skewFactors.put(75.0, 6.0);
-        skewFactors.put(74.0, 6.0);
-        skewFactors.put(73.0, 6.0);
-        skewFactors.put(72.0, 0.0);
-        skewFactors.put(71.0, 0.0);
+        skewFactors.put(-71.0, 0.0);
+        skewFactors.put(-70.0, 0.0);
         skewFactors.put(70.0, 6.0);
+        skewFactors.put(71.0, 0.0);
+        skewFactors.put(72.0, 0.0);
+        skewFactors.put(73.0, 6.0);
+        skewFactors.put(74.0, 6.0);
+        skewFactors.put(75.0, 6.0);
     }
 
     private static Simulation makeNegativeSimulation(double skew, double offsetStart, double elevation) {
@@ -129,7 +125,6 @@ public class ISS {
 
     private void setFlightConstants(double beta) {
         elevation = getConstant(elevation, elevations, beta);
-        yaw = getConstant(yaw, yaws, beta);
         skewFactor = getConstant(skewFactor, skewFactors, beta);
         offsetStart = getConstant(offsetStart, offsetsStart, beta);
     }
@@ -143,8 +138,8 @@ public class ISS {
 
 	public static void main(String... args) throws Exception {
         ISS iss;
-        if (args.length == 4) {
-            iss = new ISS(Double.parseDouble(args[0]), Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3]));
+        if (args.length == 3) {
+            iss = new ISS(Double.parseDouble(args[0]), Double.parseDouble(args[1]), Double.parseDouble(args[2]));
         } else {
             iss = new ISS();
         }
@@ -167,6 +162,7 @@ public class ISS {
 	public double getInitialOrientation(double beta) {
         setFlightConstants(beta);
 
+        double yaw = 0.0;
         double skew = -((Math.abs(beta) - 70) * skewFactor);
 		if (beta < 0) {
             simulation = makeNegativeSimulation(skew, offsetStart, elevation);
