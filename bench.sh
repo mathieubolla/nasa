@@ -17,4 +17,3 @@ do
 done
 
 echo "$sum / 12" | bc
-rm -rf results.dat
